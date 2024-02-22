@@ -1,0 +1,73 @@
+.hero-container {
+  /* margin-top: clamp(149px, 16vw, 216px); */
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: clamp(350px, 40vw, 100vh);
+}
+
+p {
+  margin: 0;
+  font-size: clamp(.9rem, 1.8vw, 1.4rem);
+}
+h1 {
+  margin-bottom: 1rem;
+  margin-top: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+button {
+  text-transform: none !important;
+  font-size: 1.2rem !important;
+  font-weight: bold !important;
+}
+
+.hero-bg-img {
+  position: absolute;
+  z-index: -1;
+  background-image: url('https://storage.googleapis.com/limelight-pictures/2015/09/999e52e5-conservatory-at-sussex-fairground-wedding-286-1440x960.jpg');
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 100%;
+}
+
+.photo-fader-div {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.4));
+  width: 100%;
+  height: 100%;
+}
+
+.content-wrapper {
+  display: flex;
+  align-items: center;
+  width: min(1500px, 100%);
+  justify-content: space-evenly;
+  text-align: center;
+  gap: 1.5rem;
+  z-index: 10 !important;
+  max-height: 100%;
+}
+
+.content-wrapper > section {
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+@media (max-width: 800px) {
+  .content-wrapper {
+    flex-direction: column;
+  }
+  .content-wrapper > section {
+    align-items: center;
+    text-align: center;
+  }
+  h1 {
+    margin-bottom: .5rem;
+  }
+}

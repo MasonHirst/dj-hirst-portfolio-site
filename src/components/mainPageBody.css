@@ -1,0 +1,11 @@
+  
+.main-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2rem !important;
+}
