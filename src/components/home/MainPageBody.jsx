@@ -1,8 +1,16 @@
 import React from 'react'
 import './mainPageBody.css'
 import Link from '@mui/material/Link'
+import { useNavigate } from 'react-router-dom'
 
 const MainPageBody = () => {
+  const navigate = useNavigate()
+
+  function goToForm() {
+    navigate('/form')
+    window.scrollTo(0, 0);
+  }
+  
   return (
     <div className='app-container main-body'>
       <h1 className='title'>DJ/MC</h1>
@@ -12,7 +20,7 @@ const MainPageBody = () => {
         music!
       </p>
       <p className='contact-info'>
-        <Link underline='none' href='https://docs.google.com/forms/d/e/1FAIpQLSc6qsXbw1iJnahJoYMukByRTscaKxs3N_TXowJIS7iJ6x3biw/viewform?usp=sf_link' target='_blank'>Contact me</Link> today to discuss your event and
+        <Link underline='none' onClick={goToForm}>Contact me</Link> today to discuss your event and
         how I can assist you in creating an unforgettable experience!
       </p>
     </div>

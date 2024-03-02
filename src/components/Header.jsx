@@ -6,8 +6,10 @@ import { Typography } from '@mui/material'
 import PhoneIcon from '@mui/icons-material/Phone'
 import EmailIcon from '@mui/icons-material/Email'
 import Link from '@mui/material/Link'
+import { useNavigate } from 'react-router-dom'
 
 const Header = ({setHeaderHeight}) => {
+  const navigate = useNavigate()
   const [shrinkLogo, setShrinkLogo] = useState(false)
   const headerRef = useRef()
 
@@ -51,6 +53,7 @@ const Header = ({setHeaderHeight}) => {
         src={hirstLogoDark}
         alt='Hirst Entertainment'
         className={`header-logo-img ${shrinkLogo ? 'shrink' : ''}`}
+        onClick={() => navigate('/')}
       />
       <section className='header-contact-container'>
         <Link
@@ -62,7 +65,7 @@ const Header = ({setHeaderHeight}) => {
           (385) 200-1306
         </Link>
         <Link
-          href='mailto:example@email.com'
+          href='mailto:hirst.entertainment@email.com'
           underline='none'
           className='contact-text-container'
         >

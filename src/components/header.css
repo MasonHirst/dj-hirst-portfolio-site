@@ -22,6 +22,7 @@ header {
 .header-logo-img {
   width: clamp(220px, 22vw, 300px);
   transition: width 0.4s;
+  cursor: pointer;
 }
 
 .header-logo-img.shrink {

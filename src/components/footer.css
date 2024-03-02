@@ -6,3 +6,12 @@ footer {
   align-items: center;
   gap: 1rem;
 }
+
+h2 {
+  margin-bottom: .5rem;
+}
+
+nav {
+  display: flex;
+  gap: 1rem;
+}
