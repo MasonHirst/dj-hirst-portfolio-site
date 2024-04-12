@@ -8,6 +8,11 @@ import { useNavigate } from 'react-router-dom'
 
 const Footer = () => {
   const navigate = useNavigate()
+  const navLinks = [
+    {label: 'Home', navPath: '/'},
+    {label: 'Form', navPath: '/form'},
+    {label: 'Payments', navPath: '/payments'}
+  ]
 
   function navigateApp(url) {
     navigate(url)
@@ -18,24 +23,19 @@ const Footer = () => {
     <footer className='app-container'>
       <h2>Mason Hirst Entertainment</h2>
       <nav>
-        <Link
-          onClick={() => navigateApp('/')}
-          underline='hover'
-          sx={{
-            cursor: 'pointer',
-          }}
-        >
-          Home
-        </Link>
-        <Link
-          onClick={() => navigateApp('/form')}
-          underline='hover'
-          sx={{
-            cursor: 'pointer',
-          }}
-        >
-          Form
-        </Link>
+        {navLinks.map(link => {
+          return (
+            <Link
+            onClick={() => navigateApp(link.navPath)}
+            underline='hover'
+            sx={{
+              cursor: 'pointer',
+            }}
+            >
+              {link.label}
+            </Link>
+          )
+        })}
       </nav>
       <Link
         href='https://www.facebook.com/profile.php?id=61556196087305'
@@ -56,7 +56,9 @@ const Footer = () => {
         underline='none'
         className='contact-text-container'
       >
-        <EmailIcon />
+        <EmailIcon sx={{
+          display: { xs: 'none', sm: 'block'},
+        }} />
         hirst.entertainment@gmail.com
       </Link>
     </footer>
