@@ -9,6 +9,7 @@ import FormRouter from './components/form/FormRouter'
 import HomeRouter from './components/home/HomeRouter'
 import { Route, Routes, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import PaymentRouter from './components/payments/PaymentRouter'
 
 function App() {
   const [headerHeight, setHeaderHeight] = useState(0)
@@ -22,6 +23,7 @@ function App() {
       <Routes>
         <Route path='/*' element={<HomeRouter />} />
         <Route path='/form/*' element={<FormRouter />} />
+        <Route path='/payments/*' element={<PaymentRouter />} />
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>
 

@@ -1,0 +1,25 @@
+.method-logo {
+  width: 80px;
+}
+
+.scan-img {
+  width: min(250px, 100%);
+}
+
+.dialog-header {
+  display: flex;
+  margin: 0 auto 0 auto;
+  align-items: center;
+  gap: 2rem;
+  > h1 {
+    margin: 0 !important;
+  }
+}
+
+.search-code-cont {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  column-gap: 1rem;
+}
