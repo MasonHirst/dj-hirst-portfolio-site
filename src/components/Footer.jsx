@@ -9,28 +9,29 @@ import { useNavigate } from 'react-router-dom'
 const Footer = () => {
   const navigate = useNavigate()
   const navLinks = [
-    {label: 'Home', navPath: '/'},
-    {label: 'Form', navPath: '/form'},
-    {label: 'Payments', navPath: '/payments'}
+    { label: 'Home', navPath: '/' },
+    { label: 'Form', navPath: '/form' },
+    { label: 'Payments', navPath: '/payments' },
   ]
 
   function navigateApp(url) {
     navigate(url)
     window.scroll(0, 0)
   }
-  
+
   return (
     <footer className='app-container'>
       <h2>Mason Hirst Entertainment</h2>
       <nav>
-        {navLinks.map(link => {
+        {navLinks.map((link) => {
           return (
             <Link
-            onClick={() => navigateApp(link.navPath)}
-            underline='hover'
-            sx={{
-              cursor: 'pointer',
-            }}
+              onClick={() => navigateApp(link.navPath)}
+              underline='hover'
+              sx={{
+                cursor: 'pointer',
+                fontSize: '1.4rem',
+              }}
             >
               {link.label}
             </Link>
@@ -56,9 +57,11 @@ const Footer = () => {
         underline='none'
         className='contact-text-container'
       >
-        <EmailIcon sx={{
-          display: { xs: 'none', sm: 'block'},
-        }} />
+        <EmailIcon
+          sx={{
+            display: { xs: 'none', sm: 'block' },
+          }}
+        />
         hirst.entertainment@gmail.com
       </Link>
     </footer>
