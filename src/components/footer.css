@@ -5,6 +5,9 @@ footer {
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  > h2 {
+    text-align: center;
+  }
 }
 
 h2 {
@@ -14,4 +17,6 @@ h2 {
 nav {
   display: flex;
   gap: 1.2rem;
+  margin-bottom: 1rem;
+  margin-top: .4rem;
 }

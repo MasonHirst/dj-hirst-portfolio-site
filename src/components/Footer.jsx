@@ -30,7 +30,7 @@ const Footer = () => {
               underline='hover'
               sx={{
                 cursor: 'pointer',
-                fontSize: '1.4rem',
+                fontSize: '1.3rem',
               }}
             >
               {link.label}
