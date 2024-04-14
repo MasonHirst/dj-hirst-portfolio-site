@@ -32,7 +32,7 @@ const PaymentRouter = () => {
       scanImgPath: null,
       searchableCode: '9167201372',
       mainInstructions: 'Mason\'s Zelle is registered under "9167201372".',
-      specialInstructions: null,
+      specialInstructions: 'For the note on the payment, please just put "Party help". Thank you!',
     },
     {
       label: 'Venmo',
@@ -44,7 +44,7 @@ const PaymentRouter = () => {
       mainInstructions:
         'Click the direct link to my profile, search for my "@Mason-Hirst", or scan the QR code!',
       specialInstructions:
-        'If the direct link does not open the app automatically, you may need to search manually for the profile.',
+        'For the note on the payment, please just put "Party help". Thank you!',
     },
     {
       label: 'PayPal',
@@ -54,9 +54,9 @@ const PaymentRouter = () => {
       scanImgPath: paypalScan,
       searchableCode: '@hirstdj',
       mainInstructions:
-        'Click the direct link to my profile, search for my "@hirstdj", or scan the QR code!',
+        'If given the option, please select "personal payment", not "business or service".',
       specialInstructions:
-        'If the direct link does not open the app automatically, you may need to search manually for the profile.',
+        'For the note on the payment, please just put "Party help". Thank you!',
     },
     {
       label: 'Google Pay',
@@ -66,9 +66,9 @@ const PaymentRouter = () => {
       scanImgPath: googlePayScan,
       searchableCode: '9167201372',
       mainInstructions:
-        'Click the direct link to my profile, search for "9167201372", or scan the QR code!',
+        'If given the option, please select "personal payment", not "business or service".',
       specialInstructions:
-        'If the direct link does not open the app automatically, you may need to search manually for the profile.',
+        'For the note on the payment, please just put "Party help". Thank you!',
     },
   ]
 

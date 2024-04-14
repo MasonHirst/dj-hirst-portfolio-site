@@ -63,19 +63,20 @@ const PaymentMethod = ({ method, close }) => {
         <h1>{label}</h1>
         <img src={logoPath} alt={label + ' logo'} className='method-logo' />
       </section>
-      <h2
+      <h3
         style={{
           textAlign: 'center',
+          margin: 0
         }}
       >
         {mainInstructions}
-      </h2>
+      </h3>
       {directPayLink && (
         <Link
           href={directPayLink}
           target='_blank'
           sx={{
-            fontSize: '1.5rem',
+            fontSize: '1.2rem',
             display: 'flex',
             alignItems: 'center',
             gap: '.5rem',
@@ -89,7 +90,7 @@ const PaymentMethod = ({ method, close }) => {
         <p
           style={{
             fontWeight: 'bold',
-            fontSize: '1.7rem',
+            fontSize: '1.3rem',
           }}
         >
           {searchableCode}
@@ -106,7 +107,7 @@ const PaymentMethod = ({ method, close }) => {
         <img src={scanImgPath} alt={label + ' QR code'} className='scan-img' />
       )}
 
-      <p style={{ textAlign: 'center' }}>{specialInstructions}</p>
+      <p style={{ textAlign: 'center', maxWidth: '400px' }}>*{specialInstructions}</p>
     </Dialog>
   )
 }
