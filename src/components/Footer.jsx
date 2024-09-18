@@ -21,13 +21,14 @@ const Footer = () => {
 
   return (
     <footer className='app-container'>
-      <h2>Mason Hirst Entertainment</h2>
+      <h2>Hirst Entertainment</h2>
       <nav>
         {navLinks.map((link) => {
           return (
             <Link
               onClick={() => navigateApp(link.navPath)}
               underline='hover'
+              key={link.label}
               sx={{
                 cursor: 'pointer',
                 fontSize: '1.3rem',

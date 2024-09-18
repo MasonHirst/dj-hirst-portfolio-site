@@ -14,10 +14,10 @@ const HeroSection = () => {
 
       <div className='app-container content-wrapper'>
         <section>
-          <h1>Mason Hirst Entertainment</h1>
-          <p>A budget-friendly DJ/MC for your wedding or event</p>
+          <h1>Welcome to Hirst Entertainment</h1>
+          <p>Mobile DJ & MC services for your event</p>
         </section>
-        <Button onClick={() => navigate('/form')} variant='contained'>Get a quote</Button>
+        <Button onClick={() => navigate('/form')} variant='contained'>Get a quote for your event</Button>
       </div>
     </div>
   )
