@@ -13,15 +13,20 @@ const MainPageBody = () => {
   
   return (
     <div className='app-container main-body'>
-      <h1 className='title'>DJ/MC</h1>
+      <h1 className='title'>About me</h1>
       <p className='description'>
-        My name is Mason Hirst, and I am a budget-friendly DJ/MC for your
-        wedding or event. I am based in northern Utah County and love good
-        music!
+        My name is Mason, and I have always loved good sound! I've built home 
+        theater surround sound systems, a home recording studio (My brother and 
+        I have a song on Spotify and Apple Music!), and now I'm into Mobile sound!
       </p>
+      <p className='description'>
+        I love connecting with people, and being a part of so many special days. Whether 
+        it's a wedding, birthday, dance, etc, I love seeing happy people enjoy good music.
+        I strive to enable you to enjoy your big day without the stress of running the show.
+      </p>
+      <br />
       <p className='contact-info'>
-        <Link underline='none' onClick={goToForm}>Contact me</Link> today to discuss your event and
-        how I can assist you in creating an unforgettable experience!
+        <Link underline='none' onClick={goToForm}>Contact me</Link> today to plan an unforgettable experience!
       </p>
     </div>
   )
