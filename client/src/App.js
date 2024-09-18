@@ -10,20 +10,42 @@ import HomeRouter from './components/home/HomeRouter'
 import { Route, Routes, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import PaymentRouter from './components/payments/PaymentRouter'
+import RequestPage from './components/request-client-view/RequestPage'
+import DjPage from './components/request-dj-view/DjPage'
+import { DjContextWrapper } from './context/DjContext'
+import { v4 as uuidv4 } from 'uuid'
 
 function App() {
   const [headerHeight, setHeaderHeight] = useState(0)
 
-  return (
-    <div style={{
-      paddingTop: headerHeight
-    }}>
-      <Header setHeaderHeight={setHeaderHeight} />
+  useEffect(() => {
+    console.log('getting client id')
+    if (!localStorage.getItem('song_request_client_id')) {
+      console.log('creating client id')
+      localStorage.setItem('song_request_client_id', uuidv4())
+    }
+  }, [])
 
+  return (
+    <div
+      style={{
+        paddingTop: headerHeight,
+      }}
+    >
+      <Header setHeaderHeight={setHeaderHeight} />
       <Routes>
         <Route path='/*' element={<HomeRouter />} />
         <Route path='/form/*' element={<FormRouter />} />
         <Route path='/payments/*' element={<PaymentRouter />} />
+        <Route path='/request/*' element={<RequestPage />} />
+        <Route
+          path='/dj-portal/*'
+          element={
+            <DjContextWrapper>
+              <DjPage />
+            </DjContextWrapper>
+          }
+        />
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>
 
