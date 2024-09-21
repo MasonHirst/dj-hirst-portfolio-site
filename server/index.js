@@ -6,7 +6,7 @@ require('dotenv').config()
 const path = require('path')
 
 const rateLimit = require('express-rate-limit');
-const { handleGetRequests, handleNewSongRequest } = require('./controllers/request-controller')
+const { handleGetRequests, handleNewSongRequest, extractClientId, handleSpotifyQuery } = require('./controllers/request-controller')
 const db = require('./utils/database/db-config')
 
 //! Middleware
@@ -23,8 +23,9 @@ const songRequestLimiter = rateLimit({
 });
 
 //! Endpoints
-app.post('/api/request-song', songRequestLimiter, handleNewSongRequest)
-app.post('/api/requests/', handleGetRequests)
+app.post('/api/request-song', songRequestLimiter, extractClientId, handleNewSongRequest)
+app.post('/api/requests', extractClientId, handleGetRequests)
+app.post('/api/spotify/search', extractClientId, handleSpotifyQuery)
 
 
 //! Serve the client files
@@ -40,6 +41,6 @@ const PORT = process.env.PORT || 8080
 db.sync()
   .then(() => {
     app.listen(PORT, () =>
-      console.log(`---------------------------SERVER RUNNING ON PORT ${PORT}`)
+      console.log(`--------------------------- SERVER RUNNING ON PORT ${PORT} ------------------------------`)
     )
   })

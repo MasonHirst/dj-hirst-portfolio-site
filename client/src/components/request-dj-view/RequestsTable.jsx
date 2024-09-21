@@ -122,7 +122,7 @@ const RequestsTable = () => {
                       }
                     >
                       {request.requester_client_id}
-                    </Link>
+                    </Link>{' '}
                     ({requestCountById[request.requester_client_id]})
                   </TableCell>
                 </TableRow>
@@ -150,7 +150,7 @@ const RequestsTable = () => {
         onPageChange={handleChangePage} // When page changes
         rowsPerPage={rowsPerPage} // Number of rows per page
         onRowsPerPageChange={handleChangeRowsPerPage} // Change rows per page
-        rowsPerPageOptions={[5, 25, 50, 100, 200]}
+        rowsPerPageOptions={[25, 50, 100, 200]}
         labelRowsPerPage='Rows per page'
       />
     </Paper>

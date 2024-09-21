@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import './footer.css'
 import PhoneIcon from '@mui/icons-material/Phone'
 import EmailIcon from '@mui/icons-material/Email'
 import Link from '@mui/material/Link'
 import FacebookIcon from '@mui/icons-material/Facebook'
 import { useNavigate } from 'react-router-dom'
+import { DesignContext } from '../context/DesignContext'
 
 const Footer = () => {
+  const { showFooter } = useContext(DesignContext)
   const navigate = useNavigate()
   const navLinks = [
     { label: 'Home', navPath: '/' },
@@ -19,8 +21,16 @@ const Footer = () => {
     window.scroll(0, 0)
   }
 
+  if (!showFooter) {
+    return
+  }
   return (
-    <footer className='app-container'>
+    <footer
+      className={`app-container ${!showFooter ? 'display-none' : ''}`}
+      style={{
+        paddingBottom: '3rem',
+      }}
+    >
       <h2>Hirst Entertainment</h2>
       <nav>
         {navLinks.map((link) => {

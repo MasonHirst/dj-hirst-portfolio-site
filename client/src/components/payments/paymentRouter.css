@@ -50,6 +50,7 @@
   margin: 5rem auto 2rem auto;
   width: fit-content;
   text-align: center;
+  font-size: 1.1rem;
 }
 
 
@@ -71,8 +72,5 @@
   }
   .img-cont-div {
     min-height: 60px;
-  }
-  .other-ways-text {
-    margin-top: 3rem;
   }
 }

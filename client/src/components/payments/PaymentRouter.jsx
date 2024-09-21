@@ -32,7 +32,8 @@ const PaymentRouter = () => {
       scanImgPath: null,
       searchableCode: '9167201372',
       mainInstructions: 'Mason\'s Zelle is registered under "9167201372".',
-      specialInstructions: 'For the note on the payment, please just put "Party help". Thank you!',
+      specialInstructions:
+        'For the note on the payment, please just put "Party help". Thank you!',
     },
     {
       label: 'Venmo',

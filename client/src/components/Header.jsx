@@ -1,58 +1,29 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import './header.css'
-import hirstLogoLight from '../assetts/light_logo_transparent.png'
-import hirstLogoDark from '../assetts/dark_logo_transparent.png'
-import { Typography } from '@mui/material'
 import PhoneIcon from '@mui/icons-material/Phone'
 import EmailIcon from '@mui/icons-material/Email'
 import Link from '@mui/material/Link'
 import { useNavigate } from 'react-router-dom'
+import HE_logo_black_transparent from '../assetts/HE_logo_black_trimmed.png'
+import { DesignContext } from '../context/DesignContext'
 
-const Header = ({setHeaderHeight}) => {
+const Header = () => {
+  const { showHeader } = useContext(DesignContext)
   const navigate = useNavigate()
-  const [shrinkLogo, setShrinkLogo] = useState(false)
-  const headerRef = useRef()
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setShrinkLogo(window.scrollY > 100)
-    }
-
-    window.addEventListener('scroll', handleScroll)
-
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-
-  useEffect(() => {
-    // Define the ResizeObserver callback
-    const resizeObserver = new ResizeObserver(entries => {
-      for (let entry of entries) {
-        // Assuming you're only observing one element (the header)
-        setHeaderHeight(entry.borderBoxSize[0].blockSize);
-      }
-    });
-
-    // Start observing the header
-    if (headerRef.current) {
-      resizeObserver.observe(headerRef.current);
-    }
-
-    // Cleanup function to disconnect the observer
-    return () => {
-      if (headerRef.current) {
-        resizeObserver.disconnect();
-      }
-    };
-  }, []);
-
+  const iconsSX = {
+    fontSize: { xs: '1rem', md: '1.4rem' },
+  }
+  const linksSX = {
+    fontSize: { xs: '1rem !important', md: '1.1rem !important' },
+  }
 
   return (
-    <header className={`${shrinkLogo ? 'shadow' : ''}`} ref={headerRef}>
+    <header className={`${!showHeader ? 'display-none' : ''}`}>
       <img
-        src={hirstLogoDark}
+        src={HE_logo_black_transparent}
         alt='Hirst Entertainment'
-        className={`header-logo-img ${shrinkLogo ? 'shrink' : ''}`}
+        className={`header-logo-img`}
         onClick={() => navigate('/')}
       />
       <section className='header-contact-container'>
@@ -60,16 +31,18 @@ const Header = ({setHeaderHeight}) => {
           href='tel:3852001306'
           underline='none'
           className='contact-text-container'
+          sx={linksSX}
         >
-          <PhoneIcon />
+          <PhoneIcon sx={iconsSX} />
           (385) 200-1306
         </Link>
         <Link
           href='mailto:hirst.entertainment@email.com'
           underline='none'
           className='contact-text-container'
+          sx={linksSX}
         >
-          <EmailIcon />
+          <EmailIcon sx={iconsSX} />
           hirst.entertainment@gmail.com
         </Link>
       </section>
