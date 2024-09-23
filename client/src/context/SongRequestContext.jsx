@@ -19,8 +19,8 @@ export function SongRequestContextProvider({ children }) {
   // const [requestBanWarning, setRequestBanWarning] = useState(false)
   // const [bannedFromRequesting, setBannedFromRequesting] = useState(false)
   const [submitError, setSubmitError] = useState(null)
-  const [spotifySearchMode, setSpotifySearchMode] = useState(true)
   const [spotifySearchQuery, setSpotifySearchQuery] = useState('')
+  const [spotifySearchResults, setSpotifySearchResults] = useState([])
   const [selectedSpotifySong, setSelectedSpotifySong] = useState(null)
 
   function onUpdateSongName(event) {
@@ -144,11 +144,15 @@ export function SongRequestContextProvider({ children }) {
     axios
       .post('api/spotify/search', { query })
       .then(({ data }) => {
-        console.log({ data })
+        setSpotifySearchResults(data)
       })
       .catch((error) => {
         console.error(error)
       })
+  }
+
+  function handleSongSelection(track) {
+    setSelectedSpotifySong(track)
   }
 
   return (
@@ -169,10 +173,10 @@ export function SongRequestContextProvider({ children }) {
         handleSubmitRequestForm,
         spotifySearchQuery,
         setSpotifySearchQuery,
-        spotifySearchMode,
-        setSpotifySearchMode,
         selectedSpotifySong,
         setSelectedSpotifySong,
+        spotifySearchResults,
+        handleSongSelection,
       }}
     >
       {children}
