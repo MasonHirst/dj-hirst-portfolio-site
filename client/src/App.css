@@ -28,3 +28,11 @@
 .display-none {
   display: none !important;
 }
+
+.custom-swal-popup {
+  bottom: 33% !important;
+}
+
+.css-zw3mfo-MuiModal-root-MuiDialog-root {
+  z-index: 100 !important;
+}

@@ -2,25 +2,27 @@ const { Op } = require('sequelize')
 const moment = require('moment')
 const validator = require('validator')
 const axios = require('axios')
+const UAParser = require('ua-parser-js')
 
 const { Request } = require('../utils/database/models')
 const rollbar = require('../utils/rollbar-config')
-const { spotifyTokenStillValid } = require('../utils/helper-functions')
+const { spotifyTokenStillValid, cleanSpotifyTrackObjects } = require('../utils/helper-functions')
 const { getSpotifyAccessToken } = require('../utils/spotify-api-config')
 
 //! spotify_access_token will store the auth token for us to
 //! access spotify API. It only lasts one hour. We will only
-//! re-fetch it when we don't have one, or it expires.
+//! fetch it when we don't have one, or it expires.
 let spotify_access_token
 let spotify_access_token_expiration
 
 module.exports = {
   handleNewSongRequest: async (req, res) => {
     try {
-      const { songName, artistName, requestReason, clientId } = req.body
-      console.log({ clientId })
+      const { requestReason, selectedSpotifySong, clientId, userAgentObj } = req.body
+      const songName = selectedSpotifySong?.name || req.body.songName
+      const artistNames = selectedSpotifySong?.artists || req.body.artistNames
 
-      if (!songName || !artistName || !requestReason) {
+      if (!songName || !artistNames[0]?.name || !requestReason) {
         throw { ...allFieldsRequiredMsg, body: req.body }
       }
 
@@ -34,20 +36,24 @@ module.exports = {
         },
       })
       if (clientRequestCount > 2) {
-        throw { ...tooManyRequestsMsg, clientRequestCount }
+        throw { ...tooManyRequestsMsg, clientRequestCount, userAgentObj }
       }
-
-      // Call the database for creation
-      const newRequest = await Request.create({
+      artistNames.forEach((artist) => artist.name.trim())
+      const createBody = {
         requester_client_id: clientId.trim(),
         song_name: songName.trim(),
-        artist_name: artistName.trim(),
+        artist_names: artistNames,
         request_reason: requestReason.trim(),
+        spotify_track: selectedSpotifySong,
         is_bookmarked: false,
         is_played: false,
         is_disliked: false,
         is_soft_deleted: false,
-      })
+        user_agent: userAgentObj,
+      }
+      console.log('🚀 ~ handleNewSongRequest: ~ createBody:', createBody)
+
+      const newRequest = await Request.create(createBody)
       if (!newRequest) {
         throw failedToCreateMsg
       }
@@ -66,41 +72,46 @@ module.exports = {
 
   handleSpotifyQuery: async (req, res) => {
     try {
-      const { query, clientId } = req.body
-      console.log(
-        'still valid: ',
-        spotifyTokenStillValid(spotify_access_token_expiration)
-      )
+      const { query } = req.body
 
       if (
         !spotify_access_token ||
         !spotifyTokenStillValid(spotify_access_token_expiration)
       ) {
-        console.log("GETTING NEW TOKEN!")
+        rollbar.log('GETTING NEW SPOTIFY ACCESS TOKEN')
         const accessObj = await getSpotifyAccessToken()
         spotify_access_token = accessObj?.token
         spotify_access_token_expiration = accessObj?.expiration
       }
 
       // Make a request to Spotify's search API
-      const searchResults = await axios.get(
-        'https://api.spotify.com/v1/search',
-        {
+      const searchResults = await axios
+        .get('https://api.spotify.com/v1/search', {
           headers: {
             Authorization: `Bearer ${spotify_access_token}`,
           },
           params: {
             q: query,
             type: 'track',
-            limit: 5, // Limit to top 5 results
+            limit: 10, // Limit to top 10 results
           },
-        }
-      )
-
-      console.log()
+        })
+        .catch((error) => {
+          if (error?.response?.status == 401) {
+            spotify_access_token = null
+            spotify_access_token_expiration = null
+            throw {
+              ...spotifyFailureMsg,
+              body: req.body,
+              status: error?.response?.status,
+              statusText: error?.response?.statusText,
+            }
+          }
+        })
 
       // Send back the top 5 search results
-      res.json(searchResults.data.tracks.items)
+      const cleanedTracks = cleanSpotifyTrackObjects(searchResults.data.tracks.items)
+      res.json(cleanedTracks)
     } catch (error) {
       const errCode = error?.code || 500
       console.error(error)
@@ -111,7 +122,7 @@ module.exports = {
 
   handleGetRequests: async (req, res) => {
     try {
-      const { getStartTime, clientId } = req.body
+      const { getStartTime } = req.body
       let where = {}
       // If "getStart" parameter is provided
       if (getStartTime && !isNaN(getStartTime)) {
@@ -133,6 +144,7 @@ module.exports = {
       if (!allRequests) {
         throw getRequestsFailedMsg
       }
+      
       res.status(200).send(allRequests)
     } catch (error) {
       const errCode = error?.code || 500
@@ -152,10 +164,22 @@ module.exports = {
         }
       }
 
+      const userAgentString = req.headers['user-agent']
+      const parser = new UAParser()
+      const deviceInfo = parser.setUA(userAgentString).getResult()
+      const userAgentObj = {
+        userAgent: userAgentString,
+        deviceType: deviceInfo.device.type || 'unknown',
+        deviceModel: deviceInfo.device.model || 'unknown',
+        os: deviceInfo.os.name + ' ' + deviceInfo.os.version,
+        browser: deviceInfo.browser.name + ' ' + deviceInfo.browser.version,
+      }
+
+      req.body.userAgentObj = userAgentObj
       req.body.clientId = requesterclientid
       next()
     } catch (err) {
-      console.log(err)
+      console.error(err)
       res.status(403).send(err)
     }
   },
@@ -184,4 +208,9 @@ const getRequestsFailedMsg = {
 const tooManyRequestsMsg = {
   message: 'Client has submitted too many requests recently',
   code: 429,
+}
+
+const spotifyFailureMsg = {
+  message: 'Failed to authenticate with spotify API',
+  code: 401,
 }
