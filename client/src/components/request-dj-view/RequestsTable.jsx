@@ -10,9 +10,10 @@ import {
   TablePagination,
   Link,
 } from '@mui/material'
-import TableRowActions from './TableRowActions'
+// import TableRowActions from './TableRowActions'
 import { DjContext } from '../../context/DjContext.jsx'
 import { useEffect } from 'react'
+import { formatArtistNames, formatTimeForDjTable } from '../../utils/helper-functions.js'
 
 const RequestsTable = () => {
   const {
@@ -55,32 +56,6 @@ const RequestsTable = () => {
     console.log(clientId)
   }
 
-  function formatTimeForDjTable(date) {
-    const now = new Date()
-    const givenDate = new Date(date)
-    const isToday = now.toDateString() === givenDate.toDateString()
-    if (isToday) {
-      return givenDate.toLocaleTimeString([], {
-        hour: 'numeric',
-        minute: '2-digit',
-      })
-    }
-    return (
-      <>
-        {givenDate.toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit',
-        })}
-        <br />
-        {givenDate.toLocaleDateString([], {
-          month: '2-digit',
-          day: '2-digit',
-          year: 'numeric',
-        })}
-      </>
-    )
-  }
-
   return (
     <Paper>
       <TableContainer
@@ -108,7 +83,7 @@ const RequestsTable = () => {
                     <TableRowActions request={request} />
                   </TableCell> */}
                   <TableCell>{request.song_name}</TableCell>
-                  <TableCell>{request.artist_name}</TableCell>
+                  <TableCell>{formatArtistNames(request.artist_names)}</TableCell>
                   <TableCell sx={{ fontSize: '0.875rem' }}>
                     {request.request_reason}
                   </TableCell>

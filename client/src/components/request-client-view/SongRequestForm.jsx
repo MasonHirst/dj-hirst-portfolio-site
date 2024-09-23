@@ -4,6 +4,7 @@ import { SongRequestContext } from '../../context/SongRequestContext'
 import SpotifySearchModal from './SpotifySearchModal'
 import spotifyLogoImg from '../../assetts/spotify-logo-official.png'
 import { Search as SearchIcon, Close as CloseIcon } from '@mui/icons-material'
+import SpotifyTrackItem from './SpotifyTrackItem'
 
 const SongRequestForm = ({ onSubmitForm, onSongNameChange }) => {
   const {
@@ -21,11 +22,16 @@ const SongRequestForm = ({ onSubmitForm, onSongNameChange }) => {
     handleSubmitRequestForm,
     spotifySearchQuery,
     selectedSpotifySong,
+    setSelectedSpotifySong,
   } = useContext(SongRequestContext)
   const [spotifySearchModalOpen, setSpotifySearchModalOpen] = useState(false)
 
   function handleOpenSpotifySearchModal() {
     setSpotifySearchModalOpen(true)
+  }
+
+  function handleClearSelectedSong() {
+    setSelectedSpotifySong(null)
   }
 
   return (
@@ -61,37 +67,60 @@ const SongRequestForm = ({ onSubmitForm, onSongNameChange }) => {
         open={spotifySearchModalOpen}
         setOpen={setSpotifySearchModalOpen}
       />
-      <TextField
-        label='Song name'
-        variant='outlined'
-        fullWidth
-        size='small'
-        margin='normal'
-        value={songName}
-        onChange={onUpdateSongName}
-        error={!!songNameError}
-        inputProps={{ maxLength: 60 }}
-        disabled={requestLoading}
-      />
-      <Typography variant='subtitle2' className='error' color='error'>
-        {songNameError}
-      </Typography>
+      {selectedSpotifySong ? (
+        <>
+          <SpotifyTrackItem
+            track={selectedSpotifySong}
+            sx={{
+              marginTop: '1rem',
+            }}
+          />
+          <Button
+            size='small'
+            onClick={handleClearSelectedSong}
+            sx={{
+              // color: '#1db954',
+              fontSize: '.9rem !important',
+            }}
+          >
+            Use manual form instead
+          </Button>
+        </>
+      ) : (
+        <>
+          <TextField
+            label='Song name'
+            variant='outlined'
+            fullWidth
+            size='small'
+            margin='normal'
+            value={songName}
+            onChange={onUpdateSongName}
+            error={!!songNameError}
+            inputProps={{ maxLength: 60 }}
+            disabled={requestLoading}
+          />
+          <Typography variant='subtitle2' className='error' color='error'>
+            {songNameError}
+          </Typography>
 
-      <TextField
-        label='Artist name'
-        variant='outlined'
-        fullWidth
-        size='small'
-        margin='normal'
-        value={artistName}
-        onChange={onUpdateArtistName}
-        error={!!artistNameError}
-        inputProps={{ maxLength: 60 }}
-        disabled={requestLoading}
-      />
-      <Typography variant='subtitle2' className='error' color='error'>
-        {artistNameError}
-      </Typography>
+          <TextField
+            label='Artist name'
+            variant='outlined'
+            fullWidth
+            size='small'
+            margin='normal'
+            value={artistName}
+            onChange={onUpdateArtistName}
+            error={!!artistNameError}
+            inputProps={{ maxLength: 60 }}
+            disabled={requestLoading}
+          />
+          <Typography variant='subtitle2' className='error' color='error'>
+            {artistNameError}
+          </Typography>
+        </>
+      )}
 
       <TextField
         label='Why are you requesting this song?'

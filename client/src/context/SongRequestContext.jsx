@@ -22,6 +22,7 @@ export function SongRequestContextProvider({ children }) {
   const [spotifySearchQuery, setSpotifySearchQuery] = useState('')
   const [spotifySearchResults, setSpotifySearchResults] = useState([])
   const [selectedSpotifySong, setSelectedSpotifySong] = useState(null)
+  const [spotifyLoading, setSpotifyLoading] = useState(false)
 
   function onUpdateSongName(event) {
     setSongNameError('')
@@ -37,6 +38,9 @@ export function SongRequestContextProvider({ children }) {
   }
 
   function _resetFields() {
+    setSelectedSpotifySong(null)
+    setSpotifySearchQuery('')
+    setSpotifySearchResults([])
     setSongName('')
     setSongNameError('')
     setArtistName('')
@@ -66,11 +70,11 @@ export function SongRequestContextProvider({ children }) {
     if (requestLoading) {
       return
     }
-    if (!songName) {
+    if (!songName && !selectedSpotifySong) {
       setSongNameError(errorMsg)
       return
     }
-    if (!artistName) {
+    if (!artistName && !selectedSpotifySong) {
       setArtistNameError(errorMsg)
       return
     }
@@ -85,9 +89,13 @@ export function SongRequestContextProvider({ children }) {
     // private function
     const reqBody = {
       songName,
-      artistName,
+      artistNames: [{ name: artistName }],
       requestReason,
+      selectedSpotifySong,
     }
+    console.log(selectedSpotifySong.artists)
+    console.log(reqBody)
+    // return
     setSubmitError(null)
     setRequestLoading(true)
     setTimeout(() => {
@@ -103,17 +111,14 @@ export function SongRequestContextProvider({ children }) {
         })
         .catch((error) => {
           setSubmitError(submitErrorMsg)
-          console.log('Error in submitSongRequest: ', error)
-          console.log(error.status)
           if (error.status == 429) {
-            console.log('429 response')
             handleTooManyRequestsResponse()
           }
         })
         .finally(() => {
           setRequestLoading(false)
         })
-    }, 800) // create an increased sense of loading for song requests
+    }, 600) // create an increased sense of loading for song requests
   }
 
   function activateConfirmationModal() {
@@ -135,12 +140,26 @@ export function SongRequestContextProvider({ children }) {
   }
 
   useEffect(() => {
-    if (spotifySearchQuery.length > 3) {
-      querySpotify(spotifySearchQuery)
+    if (!spotifySearchQuery) {
+      setSpotifySearchResults([])
+      return
     }
+    const delayDebounceFn = setTimeout(() => {
+      if (spotifySearchQuery.length > 2) {
+        querySpotify(spotifySearchQuery)
+      }
+    }, 500)
+
+    // Cleanup function to clear the timeout if the query changes within 500ms
+    return () => clearTimeout(delayDebounceFn)
   }, [spotifySearchQuery])
 
   function querySpotify(query) {
+    if (!query || typeof query !== 'string') {
+      console.error('invalid search query')
+      return
+    }
+    setSpotifyLoading(true)
     axios
       .post('api/spotify/search', { query })
       .then(({ data }) => {
@@ -149,10 +168,14 @@ export function SongRequestContextProvider({ children }) {
       .catch((error) => {
         console.error(error)
       })
+      .finally(() => setSpotifyLoading(false))
   }
 
   function handleSongSelection(track) {
+    _resetFields()
     setSelectedSpotifySong(track)
+    // setSongName(track.name)
+    // setArtistName(track.artists.map((artist) => artist.name).join(', '))
   }
 
   return (
@@ -176,7 +199,9 @@ export function SongRequestContextProvider({ children }) {
         selectedSpotifySong,
         setSelectedSpotifySong,
         spotifySearchResults,
+        setSpotifySearchResults,
         handleSongSelection,
+        spotifyLoading,
       }}
     >
       {children}

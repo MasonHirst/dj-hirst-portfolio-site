@@ -13,12 +13,16 @@ const Request = db.define('request', {
     type: DataTypes.STRING({ length: 40 }),
     allowNull: false
   },
+  spotify_track: {
+    type: DataTypes.JSON,
+    allowNull: true,
+  },
   song_name: {
     type: DataTypes.STRING({ length: 60 }),
     allowNull: false,
   },
-  artist_name: {
-    type: DataTypes.STRING({ length: 60 }),
+  artist_names: {
+    type: DataTypes.ARRAY(DataTypes.JSON),
     allowNull: false,
   },
   request_reason: {
@@ -41,6 +45,10 @@ const Request = db.define('request', {
     type: DataTypes.BOOLEAN,
     allowNull: true,
   },
+  user_agent: {
+    type: DataTypes.JSON,
+    allowNull: true,
+  }
 })
 
 module.exports = {

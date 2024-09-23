@@ -5,43 +5,66 @@ import {
   TextField,
   IconButton,
   List,
-  ListItem,
-  ListItemText,
-  ListItemAvatar,
-  Avatar,
   CircularProgress,
-  Button,
-  AppBar,
-  Toolbar,
   Typography,
   Box,
+  Divider,
+  InputAdornment,
 } from '@mui/material'
-import { Close as CloseIcon } from '@mui/icons-material'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { SongRequestContext } from '../../context/SongRequestContext'
+import SpotifyTrackItem from './SpotifyTrackItem'
+import Swal from 'sweetalert2'
 
 const SpotifySearchModal = ({ open, setOpen }) => {
-  const [loading, setLoading] = useState(false)
   const {
     spotifySearchQuery,
     setSpotifySearchQuery,
     spotifySearchResults,
     handleSongSelection,
+    setSpotifySearchResults,
+    spotifyLoading,
   } = useContext(SongRequestContext)
 
   // Handle search input change and fetch data from server
-  const handleSearchInput = async (e) => {
+  function handleSearchInput(e) {
     setSpotifySearchQuery(e.target.value)
   }
 
   function handleClose() {
     setOpen(false)
+    // setSpotifySearchQuery('')
+    // setSpotifySearchResults([])
+  }
+
+  function handleClear() {
+    setSpotifySearchQuery('')
+    setSpotifySearchResults([])
+  }
+
+  function selectTrack(track) {
+    if (track.explicit) {
+      Swal.fire({
+        title: 'This song is explicit',
+        text: 'Hirst Entertainment does not accept explicit song requests. Please select a clean version, or a different song.',
+        icon: 'warning',
+        confirmButtonText: 'Ok',
+        customClass: {
+          popup: 'custom-swal-popup',
+        },
+      })
+    } else {
+      handleSongSelection(track)
+      handleClose()
+    }
   }
 
   return (
     <Dialog fullScreen open={open} onClose={handleClose}>
       <DialogContent
         sx={{
-          padding: '.8rem',
+          padding: '1rem',
         }}
       >
         <Box
@@ -49,15 +72,18 @@ const SpotifySearchModal = ({ open, setOpen }) => {
           flexDirection='row'
           justifyContent='space-between'
           alignItems='center'
-          gap={3}
+          gap={2}
         >
           <IconButton
             edge='end'
             color='inherit'
             onClick={handleClose}
             aria-label='close'
+            sx={{
+              marginLeft: '-0.3rem',
+            }}
           >
-            <CloseIcon />
+            <ArrowBackIcon />
           </IconButton>
           <TextField
             autoFocus
@@ -67,47 +93,63 @@ const SpotifySearchModal = ({ open, setOpen }) => {
             value={spotifySearchQuery}
             onChange={handleSearchInput}
             InputProps={{
-              sx: {},
+              endAdornment: spotifySearchQuery && (
+                <InputAdornment position='end'>
+                  <IconButton onClick={handleClear} edge='end'>
+                    <CloseRoundedIcon sx={{
+                      opacity: .8,
+                    }} />
+                  </IconButton>
+                </InputAdornment>
+              ),
             }}
             variant='outlined'
           />
         </Box>
-        <Typography
-          variant='caption'
-          sx={{
-            opacity: 0.7,
-            textAlign: 'center',
-          }}
-        >
-          Start typing at least 3 characters to search
-        </Typography>
-
-        {loading && <CircularProgress size={24} sx={{ margin: '20px' }} />}
-
+        {!spotifySearchResults.length && !spotifyLoading && (
+          <Typography
+            variant='caption'
+            sx={{
+              display: 'block',
+              opacity: 0.7,
+              textAlign: 'center',
+              marginTop: '.7rem',
+            }}
+          >
+            Start typing at least 3 characters to search
+          </Typography>
+        )}
+        {spotifyLoading && (
+          <CircularProgress
+            size={24}
+            sx={{ margin: '20px', color: '#191414' }}
+          />
+        )}
         <List>
           {spotifySearchResults.length > 0 &&
             spotifySearchResults.map((track) => (
-              <ListItem
+              <SpotifyTrackItem
                 key={track.id}
-                button
-                onClick={() => handleSongSelection(track)}
-              >
-                <ListItemAvatar>
-                  <Avatar
-                    variant='square'
-                    src={track.album.images[1]?.url} // Medium album cover
-                    alt={track.name}
-                  />
-                </ListItemAvatar>
-                <ListItemText
-                  primary={track.name}
-                  secondary={track.artists
-                    .map((artist) => artist.name)
-                    .join(', ')}
-                />
-              </ListItem>
+                track={track}
+                selectTrack={selectTrack}
+                sx={{
+                  padding: '.2rem 0',
+                }}
+              />
             ))}
         </List>
+        {spotifySearchResults.length > 0 && (
+          <Divider
+            sx={{
+              margin: '1rem 0',
+              fontSize: '.9rem',
+              opacity: 0.9,
+              borderBottomWidth: '5px',
+            }}
+          >
+            Showing top {spotifySearchResults.length} search results
+          </Divider>
+        )}
       </DialogContent>
     </Dialog>
   )

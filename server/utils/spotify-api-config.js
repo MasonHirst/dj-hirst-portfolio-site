@@ -20,8 +20,7 @@ async function getSpotifyAccessToken() {
 
   try {
     const response = await axios(authOptions)
-    // const _59minutesOut = 60 * 59 * 1000
-    const _59minutesOut = 20 * 1 * 1000 // less time for testing
+    const _59minutesOut = 60 * 59 * 1000
     const expirationTime = Date.now() + _59minutesOut // 59 minutes from retrieval
     return {
       token: response.data.access_token,
