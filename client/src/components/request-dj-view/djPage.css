@@ -1,0 +1,26 @@
+.request-table-spotify-button {
+  background-color: #191414 !important;
+  border-radius: 0.35rem !important;
+  padding: 0.15rem !important;
+}
+
+td {
+  padding: .4rem .8rem !important;
+}
+
+.swal-confirm-button {
+  background-color: #191414; /* Default background color */
+  color: #1DB954; /* Default text color */
+}
+
+.swal-confirm-button {
+  background-color: #1DB954; /* Default background color */
+  color: white;
+  border: 1px solid transparent; /* Default border */
+}
+
+.swal-confirm-button:focus {
+  outline: none;
+  border: 2px solid #1DB954; /* Green border when focused */
+  box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.5); /* Optional: Add a green glow effect */
+}

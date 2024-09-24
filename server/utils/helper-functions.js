@@ -4,7 +4,8 @@ function spotifyTokenStillValid(tokenExpiration) {
 
 
 function cleanSpotifyTrackObjects(tracks = []) {
-  tracks.forEach((track) => {
+  const tracksCopy = [...tracks]
+  tracksCopy.forEach((track) => {
     delete track.available_markets
     delete track.album.available_markets
     delete track.album.release_date_precision
@@ -19,7 +20,7 @@ function cleanSpotifyTrackObjects(tracks = []) {
     delete track.preview_url
     delete track.external_ids
     delete track.disc_number
-    delete track.uri
+    delete track.href
     delete track.is_local
     delete track.popularity
     delete track.track_number
@@ -29,12 +30,8 @@ function cleanSpotifyTrackObjects(tracks = []) {
       delete artist.uri
     })
   })
-  return tracks
+  return tracksCopy
 }
-
-
-// hello there
-
 
 
 module.exports = {

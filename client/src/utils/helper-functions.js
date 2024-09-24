@@ -25,11 +25,21 @@ function formatTimeForDjTable(date) {
 }
 
 function formatArtistNames(artistsArray = []) {
-  console.log("🚀 ~ formatArtistNames ~ artistsArray:", artistsArray)
-  
-  const names = artistsArray.map((artist) => artist.name).join(', ')
-  console.log("🚀 ~ formatArtistNames ~ names:", names)
-  return names
+  return artistsArray.map((artist) => artist.name).join(', ')
+}
+
+
+function formatTrackDuration(durationMs) {
+  if (!durationMs) {
+    return null
+  }
+  const minutes = Math.floor(durationMs / 60000);
+  const seconds = Math.floor((durationMs % 60000) / 1000).toString().padStart(2, '0');
+  return `${minutes}:${seconds}`;
+}
+
+function getMillisecondsForPastHours(hoursAgo) {
+  return Date.now() - hoursAgo * 60 * 60 * 1000 // Subtract the given number of hours
 }
 
 
@@ -37,4 +47,6 @@ function formatArtistNames(artistsArray = []) {
 export {
   formatTimeForDjTable,
   formatArtistNames,
+  formatTrackDuration,
+  getMillisecondsForPastHours,
 }

@@ -1,5 +1,6 @@
-import React, { createContext, useState, useEffect, useContext } from 'react'
+import React, { createContext, useState, useEffect, useContext, useMemo } from 'react'
 import axios from 'axios'
+import { getMillisecondsForPastHours } from '../utils/helper-functions'
 
 export const DjContext = createContext()
 
@@ -9,13 +10,14 @@ export function DjContextWrapper({ children }) {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(50)
   const [songFetchLoading, setSongFetchLoading] = useState(false)
+  const [clientIdFilter, setClientIdFilter] = useState(null)
+  const [songNameFilter, setSongNameFilter] = useState(null)
 
   useEffect(() => {
     handleGetRequests()
   }, [timeRange])
 
   function handleRefreshRequests() {
-    console.log('handling refresh!')
     handleGetRequests()
   }
 
@@ -34,19 +36,38 @@ export function DjContextWrapper({ children }) {
         }
       })
       .catch((error) => {
-        console.log('! Error in handleGetRequests: ', error)
+        console.error('! Error in handleGetRequests: ', error)
       })
       .finally(() => setSongFetchLoading(false))
   }
 
-  function getMillisecondsForPastHours(hoursAgo) {
-    return Date.now() - hoursAgo * 60 * 60 * 1000 // Subtract the given number of hours
-  }
+  const filteredSongRequests = useMemo(() => {
+    // If no filters are applied, return all song requests
+    if (!clientIdFilter && !songNameFilter) {
+      return songRequests;
+    }
+  
+    return songRequests.filter((request) => {
+      // Apply filtering logic
+      const matchesClientId = clientIdFilter 
+        ? request.requester_client_id === clientIdFilter 
+        : true;
+  
+      const matchesSongName = songNameFilter 
+        ? songNameFilter.toLowerCase().includes(request.request_details.name.toLowerCase())
+        : true;
+  
+      // Return only requests that match both clientId and songName filters
+      return matchesClientId && matchesSongName;
+    });
+  }, [songRequests, clientIdFilter, songNameFilter]);
+
+  
 
   return (
     <DjContext.Provider
       value={{
-        songRequests,
+        filteredSongRequests,
         timeRange,
         setTimeRange,
         songFetchLoading,
@@ -55,6 +76,10 @@ export function DjContextWrapper({ children }) {
         rowsPerPage,
         setRowsPerPage,
         handleRefreshRequests,
+        clientIdFilter,
+        setClientIdFilter,
+        songNameFilter,
+        setSongNameFilter,
       }}
     >
       {children}

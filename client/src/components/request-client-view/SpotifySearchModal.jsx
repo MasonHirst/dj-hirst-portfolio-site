@@ -12,7 +12,7 @@ import {
   InputAdornment,
 } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 import { SongRequestContext } from '../../context/SongRequestContext'
 import SpotifyTrackItem from './SpotifyTrackItem'
 import Swal from 'sweetalert2'
@@ -96,12 +96,24 @@ const SpotifySearchModal = ({ open, setOpen }) => {
               endAdornment: spotifySearchQuery && (
                 <InputAdornment position='end'>
                   <IconButton onClick={handleClear} edge='end'>
-                    <CloseRoundedIcon sx={{
-                      opacity: .8,
-                    }} />
+                    <CloseRoundedIcon
+                      sx={{
+                        opacity: 0.8,
+                      }}
+                    />
                   </IconButton>
                 </InputAdornment>
               ),
+            }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': {
+                  borderColor: '#1DB954', // Change border color on hover
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#1DB954', // Spotify green border when focused
+                },
+              },
             }}
             variant='outlined'
           />
@@ -130,6 +142,7 @@ const SpotifySearchModal = ({ open, setOpen }) => {
             spotifySearchResults.map((track) => (
               <SpotifyTrackItem
                 key={track.id}
+                clickable
                 track={track}
                 selectTrack={selectTrack}
                 sx={{
