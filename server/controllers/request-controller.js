@@ -6,7 +6,10 @@ const UAParser = require('ua-parser-js')
 
 const { Request } = require('../utils/database/models')
 const rollbar = require('../utils/rollbar-config')
-const { spotifyTokenStillValid, cleanSpotifyTrackObjects } = require('../utils/helper-functions')
+const {
+  spotifyTokenStillValid,
+  cleanSpotifyTrackObjects,
+} = require('../utils/helper-functions')
 const { getSpotifyAccessToken } = require('../utils/spotify-api-config')
 
 //! spotify_access_token will store the auth token for us to
@@ -18,11 +21,12 @@ let spotify_access_token_expiration
 module.exports = {
   handleNewSongRequest: async (req, res) => {
     try {
-      const { requestReason, selectedSpotifySong, clientId, userAgentObj } = req.body
-      const songName = selectedSpotifySong?.name || req.body.songName
-      const artistNames = selectedSpotifySong?.artists || req.body.artistNames
-
-      if (!songName || !artistNames[0]?.name || !requestReason) {
+      const { requestReason, clientId, userAgentObj, requestDetails } = req.body
+      if (
+        !requestDetails?.name ||
+        !requestDetails?.artists?.[0]?.name ||
+        !requestReason
+      ) {
         throw { ...allFieldsRequiredMsg, body: req.body }
       }
 
@@ -35,23 +39,22 @@ module.exports = {
           },
         },
       })
-      if (clientRequestCount > 2) {
+      if (clientRequestCount >= 5) {
         throw { ...tooManyRequestsMsg, clientRequestCount, userAgentObj }
       }
-      artistNames.forEach((artist) => artist.name.trim())
+      requestDetails.name = requestDetails.name.trim()
+      requestDetails.artists.forEach(artist => artist.name = artist.name.trim())
+
       const createBody = {
         requester_client_id: clientId.trim(),
-        song_name: songName.trim(),
-        artist_names: artistNames,
+        request_details: requestDetails,
         request_reason: requestReason.trim(),
-        spotify_track: selectedSpotifySong,
         is_bookmarked: false,
         is_played: false,
         is_disliked: false,
         is_soft_deleted: false,
         user_agent: userAgentObj,
       }
-      console.log('🚀 ~ handleNewSongRequest: ~ createBody:', createBody)
 
       const newRequest = await Request.create(createBody)
       if (!newRequest) {
@@ -109,9 +112,11 @@ module.exports = {
           }
         })
 
-      // Send back the top 5 search results
-      const cleanedTracks = cleanSpotifyTrackObjects(searchResults.data.tracks.items)
+      const cleanedTracks = cleanSpotifyTrackObjects(
+        searchResults.data.tracks.items
+      )
       res.json(cleanedTracks)
+      // res.json(searchResults.data.tracks.items)
     } catch (error) {
       const errCode = error?.code || 500
       console.error(error)
@@ -144,7 +149,7 @@ module.exports = {
       if (!allRequests) {
         throw getRequestsFailedMsg
       }
-      
+
       res.status(200).send(allRequests)
     } catch (error) {
       const errCode = error?.code || 500

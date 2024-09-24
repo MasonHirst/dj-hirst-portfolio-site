@@ -1,10 +1,12 @@
-import { Box, IconButton, Typography } from '@mui/material'
+import { Box, IconButton, Tooltip, Typography } from '@mui/material'
+import RefreshRoundedIcon from '@mui/icons-material/RefreshRounded'
 import React, { useEffect, useContext } from 'react'
 import RequestHourFilter from './RequestHourFilter'
 import RequestsTable from './RequestsTable'
 import { DesignContext } from '../../context/DesignContext'
 import { DjContext } from '../../context/DjContext'
-import RefreshRoundedIcon from '@mui/icons-material/RefreshRounded'
+import './djPage.css'
+import RequestFilterBanners from './RequestFilterBanners'
 
 const DjPage = () => {
   const { setShowHeader } = useContext(DesignContext)
@@ -47,16 +49,21 @@ const DjPage = () => {
           >
             Song Requests
           </Typography>
-          <IconButton
-            onClick={handleRefreshRequests}
-            disabled={songFetchLoading}
-          >
-            <RefreshRoundedIcon />
-          </IconButton>
+          <Tooltip title='Refresh song requests'>
+            <IconButton
+              onClick={handleRefreshRequests}
+              disabled={songFetchLoading}
+            >
+              <RefreshRoundedIcon />
+            </IconButton>
+          </Tooltip>
         </Box>
 
         <RequestHourFilter />
       </Box>
+
+      <RequestFilterBanners />
+
       <RequestsTable />
     </Box>
   )

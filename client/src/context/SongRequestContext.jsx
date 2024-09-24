@@ -88,13 +88,13 @@ export function SongRequestContextProvider({ children }) {
   function submitSongRequest() {
     // private function
     const reqBody = {
-      songName,
-      artistNames: [{ name: artistName }],
+      requestDetails: selectedSpotifySong || {
+        name: songName,
+        artists: [{ name: artistName }],
+      },
       requestReason,
       selectedSpotifySong,
     }
-    console.log(selectedSpotifySong.artists)
-    console.log(reqBody)
     // return
     setSubmitError(null)
     setRequestLoading(true)

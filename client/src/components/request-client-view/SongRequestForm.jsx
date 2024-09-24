@@ -79,7 +79,6 @@ const SongRequestForm = ({ onSubmitForm, onSongNameChange }) => {
             size='small'
             onClick={handleClearSelectedSong}
             sx={{
-              // color: '#1db954',
               fontSize: '.9rem !important',
             }}
           >
