@@ -37,10 +37,11 @@ app.get('*', (req, res) => {
 
 //! Server listen
 const PORT = process.env.PORT || 8080
+const { PROD_DATABASE_CONNECTION_STRING } = process.env
 
 db.sync()
   .then(() => {
-    app.listen(PORT, () =>
-      console.log(`--------------------------- SERVER RUNNING ON PORT ${PORT} ------------------------------`)
-    )
+    app.listen(PORT, () => {
+      console.log(`🚀🚀🚀🚀-------------- SERVER RUNNING ON PORT ${PORT} -----------------🚀🚀🚀`)
+    })
   })
