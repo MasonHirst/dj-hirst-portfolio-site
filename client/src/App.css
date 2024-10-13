@@ -1,0 +1,38 @@
+.app-container {
+  padding: 3.5rem 3rem;
+}
+
+
+@media (max-width: 600px) {
+  .app-container {
+    padding: 1rem 2rem;
+  }
+}
+
+.error {
+  text-align: left;
+}
+
+.hour-filter-form {
+  max-width: 250px !important;
+  min-width: 200px !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.table-header-cell {
+  font-weight: bold !important;
+  font-size: 1rem !important;
+}
+
+.display-none {
+  display: none !important;
+}
+
+.custom-swal-popup {
+  bottom: 33% !important;
+}
+
+.css-zw3mfo-MuiModal-root-MuiDialog-root {
+  z-index: 100 !important;
+}
