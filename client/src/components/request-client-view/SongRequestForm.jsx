@@ -1,10 +1,11 @@
 import { Button, TextField, Typography } from '@mui/material'
-import React, { useContext, useMemo, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { SongRequestContext } from '../../context/SongRequestContext'
 import SpotifySearchModal from './SpotifySearchModal'
 import spotifyLogoImg from '../../assetts/spotify-logo-official.png'
-import { Search as SearchIcon, Close as CloseIcon } from '@mui/icons-material'
+import { Search as SearchIcon } from '@mui/icons-material'
 import SpotifyTrackItem from './SpotifyTrackItem'
+import Divider from '@mui/material/Divider'
 
 const SongRequestForm = ({ onSubmitForm, onSongNameChange }) => {
   const {
@@ -54,7 +55,7 @@ const SongRequestForm = ({ onSubmitForm, onSongNameChange }) => {
           backgroundColor: '#191414',
         }}
       >
-        Search Spotify
+        Search for a Song
         <img
           src={spotifyLogoImg}
           style={{
@@ -69,24 +70,46 @@ const SongRequestForm = ({ onSubmitForm, onSongNameChange }) => {
       />
       {selectedSpotifySong ? (
         <>
+            <Button
+              size='small'
+              onClick={handleClearSelectedSong}
+              sx={{
+                fontSize: '.9rem !important',
+                marginTop: '1rem',
+              }}
+            >
+              Use manual form instead
+            </Button>
           <SpotifyTrackItem
             track={selectedSpotifySong}
             sx={{
               marginTop: '1rem',
             }}
           />
-          <Button
-            size='small'
-            onClick={handleClearSelectedSong}
-            sx={{
-              fontSize: '.9rem !important',
-            }}
-          >
-            Use manual form instead
-          </Button>
         </>
       ) : (
         <>
+          <Divider
+            sx={{
+              marginTop: '1rem',
+              marginBottom: '.4rem',
+              padding: '1rem 2rem',
+            }}
+          >
+            <span
+              style={{
+                opacity: 0.6,
+                fontSize: '1.3rem',
+              }}
+            >
+              or
+            </span>
+          </Divider>
+
+
+          <Typography align='center' sx={{
+            marginBottom: '-.6rem',
+          }}>Manual Request Form</Typography>
           <TextField
             label='Song name'
             variant='outlined'
