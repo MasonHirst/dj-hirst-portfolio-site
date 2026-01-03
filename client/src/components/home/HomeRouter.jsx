@@ -1,16 +1,15 @@
-import React from 'react'
-import HeroSection from './HeroSection'
-import MainPageBody from './MainPageBody'
-// import { Routes, Route, Navigate } from 'react-router-dom'
+import HeroSection from './HeroSection';
+import MainPageBody from './MainPageBody';
+// import PicturesSection from './PicturesSection';
 
 const HomeRouter = () => {
-  
   return (
     <div>
       <HeroSection />
       <MainPageBody />
+      {/* <PicturesSection /> */}
     </div>
-  )
-}
+  );
+};
 
-export default HomeRouter
+export default HomeRouter;

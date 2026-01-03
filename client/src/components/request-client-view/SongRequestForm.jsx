@@ -1,11 +1,11 @@
-import { Button, TextField, Typography } from '@mui/material'
-import React, { useContext, useState } from 'react'
-import { SongRequestContext } from '../../context/SongRequestContext'
-import SpotifySearchModal from './SpotifySearchModal'
-import spotifyLogoImg from '../../assetts/spotify-logo-official.png'
-import { Search as SearchIcon } from '@mui/icons-material'
-import SpotifyTrackItem from './SpotifyTrackItem'
-import Divider from '@mui/material/Divider'
+import { Button, TextField, Typography } from '@mui/material';
+import React, { useContext, useState } from 'react';
+import { SongRequestContext } from '../../context/SongRequestContext';
+import SpotifySearchModal from './SpotifySearchModal';
+import spotifyLogoImg from '../../assetts/spotify-logo-official.png';
+import { Search as SearchIcon } from '@mui/icons-material';
+import SpotifyTrackItem from './SpotifyTrackItem';
+import Divider from '@mui/material/Divider';
 
 const SongRequestForm = ({ onSubmitForm, onSongNameChange }) => {
   const {
@@ -24,16 +24,65 @@ const SongRequestForm = ({ onSubmitForm, onSongNameChange }) => {
     spotifySearchQuery,
     selectedSpotifySong,
     setSelectedSpotifySong,
-  } = useContext(SongRequestContext)
-  const [spotifySearchModalOpen, setSpotifySearchModalOpen] = useState(false)
+  } = useContext(SongRequestContext);
+  const [spotifySearchModalOpen, setSpotifySearchModalOpen] = useState(false);
+  const [showManualFields, setShowManualFields] = useState(false);
 
   function handleOpenSpotifySearchModal() {
-    setSpotifySearchModalOpen(true)
+    setSpotifySearchModalOpen(true);
   }
 
   function handleClearSelectedSong() {
-    setSelectedSpotifySong(null)
+    setSelectedSpotifySong(null);
   }
+
+  function handleShowManualFields() {
+    setShowManualFields(true);
+  }
+
+  const manualFields = (
+    <>
+      <Typography
+        align='center'
+        sx={{
+          marginBottom: '-.6rem',
+        }}
+      >
+        Manual Request Form
+      </Typography>
+      <TextField
+        label='Song name'
+        variant='outlined'
+        fullWidth
+        size='small'
+        margin='normal'
+        value={songName}
+        onChange={onUpdateSongName}
+        error={!!songNameError}
+        inputProps={{ maxLength: 60 }}
+        disabled={requestLoading}
+      />
+      <Typography variant='subtitle2' className='error' color='error'>
+        {songNameError}
+      </Typography>
+
+      <TextField
+        label='Artist name'
+        variant='outlined'
+        fullWidth
+        size='small'
+        margin='normal'
+        value={artistName}
+        onChange={onUpdateArtistName}
+        error={!!artistNameError}
+        inputProps={{ maxLength: 60 }}
+        disabled={requestLoading}
+      />
+      <Typography variant='subtitle2' className='error' color='error'>
+        {artistNameError}
+      </Typography>
+    </>
+  );
 
   return (
     <form
@@ -70,16 +119,16 @@ const SongRequestForm = ({ onSubmitForm, onSongNameChange }) => {
       />
       {selectedSpotifySong ? (
         <>
-            <Button
-              size='small'
-              onClick={handleClearSelectedSong}
-              sx={{
-                fontSize: '.9rem !important',
-                marginTop: '1rem',
-              }}
-            >
-              Use manual form instead
-            </Button>
+          <Button
+            size='small'
+            onClick={handleClearSelectedSong}
+            sx={{
+              fontSize: '.9rem !important',
+              marginTop: '1rem',
+            }}
+          >
+            Use manual form instead
+          </Button>
           <SpotifyTrackItem
             track={selectedSpotifySong}
             sx={{
@@ -106,41 +155,20 @@ const SongRequestForm = ({ onSubmitForm, onSongNameChange }) => {
             </span>
           </Divider>
 
-
-          <Typography align='center' sx={{
-            marginBottom: '-.6rem',
-          }}>Manual Request Form</Typography>
-          <TextField
-            label='Song name'
-            variant='outlined'
-            fullWidth
-            size='small'
-            margin='normal'
-            value={songName}
-            onChange={onUpdateSongName}
-            error={!!songNameError}
-            inputProps={{ maxLength: 60 }}
-            disabled={requestLoading}
-          />
-          <Typography variant='subtitle2' className='error' color='error'>
-            {songNameError}
-          </Typography>
-
-          <TextField
-            label='Artist name'
-            variant='outlined'
-            fullWidth
-            size='small'
-            margin='normal'
-            value={artistName}
-            onChange={onUpdateArtistName}
-            error={!!artistNameError}
-            inputProps={{ maxLength: 60 }}
-            disabled={requestLoading}
-          />
-          <Typography variant='subtitle2' className='error' color='error'>
-            {artistNameError}
-          </Typography>
+          {!showManualFields && (
+            <Button
+              size='small'
+              onClick={handleShowManualFields}
+              sx={{
+                fontSize: '.9rem !important',
+                marginTop: '1rem',
+                opacity: 0.9,
+              }}
+            >
+              Use manual form instead
+            </Button>
+          )}
+          {showManualFields && manualFields}
         </>
       )}
 
@@ -191,7 +219,7 @@ const SongRequestForm = ({ onSubmitForm, onSongNameChange }) => {
         Submit request
       </Button>
     </form>
-  )
-}
+  );
+};
 
-export default SongRequestForm
+export default SongRequestForm;
