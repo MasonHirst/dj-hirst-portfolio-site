@@ -9,19 +9,15 @@ import Divider from '@mui/material/Divider';
 
 const SongRequestForm = ({ onSubmitForm, onSongNameChange }) => {
   const {
-    songName,
-    songNameError,
-    artistName,
-    artistNameError,
     requestReason,
     requestReasonError,
     requestLoading,
-    onUpdateSongName,
-    onUpdateArtistName,
     onUpdateRequestReason,
     submitError,
     handleSubmitRequestForm,
     spotifySearchQuery,
+    noSpotifySongError,
+    setNoSpotifySongError,
     selectedSpotifySong,
     setSelectedSpotifySong,
   } = useContext(SongRequestContext);
@@ -29,6 +25,7 @@ const SongRequestForm = ({ onSubmitForm, onSongNameChange }) => {
   const [showManualFields, setShowManualFields] = useState(false);
 
   function handleOpenSpotifySearchModal() {
+    setNoSpotifySongError(null);
     setSpotifySearchModalOpen(true);
   }
 
@@ -39,50 +36,6 @@ const SongRequestForm = ({ onSubmitForm, onSongNameChange }) => {
   function handleShowManualFields() {
     setShowManualFields(true);
   }
-
-  const manualFields = (
-    <>
-      <Typography
-        align='center'
-        sx={{
-          marginBottom: '-.6rem',
-        }}
-      >
-        Manual Request Form
-      </Typography>
-      <TextField
-        label='Song name'
-        variant='outlined'
-        fullWidth
-        size='small'
-        margin='normal'
-        value={songName}
-        onChange={onUpdateSongName}
-        error={!!songNameError}
-        inputProps={{ maxLength: 60 }}
-        disabled={requestLoading}
-      />
-      <Typography variant='subtitle2' className='error' color='error'>
-        {songNameError}
-      </Typography>
-
-      <TextField
-        label='Artist name'
-        variant='outlined'
-        fullWidth
-        size='small'
-        margin='normal'
-        value={artistName}
-        onChange={onUpdateArtistName}
-        error={!!artistNameError}
-        inputProps={{ maxLength: 60 }}
-        disabled={requestLoading}
-      />
-      <Typography variant='subtitle2' className='error' color='error'>
-        {artistNameError}
-      </Typography>
-    </>
-  );
 
   return (
     <form
@@ -102,78 +55,41 @@ const SongRequestForm = ({ onSubmitForm, onSongNameChange }) => {
         fullWidth
         sx={{
           backgroundColor: '#191414',
+          marginTop: '10px',
+          marginBottom: '15px',
         }}
       >
         Search for a Song
         <img
           src={spotifyLogoImg}
+          alt='Spotify Logo'
           style={{
             height: '2.5rem',
             marginLeft: '.7rem',
           }}
         />
       </Button>
+
+      <Typography variant='subtitle2' className='error' color='error'>
+        {noSpotifySongError}
+      </Typography>
+
       <SpotifySearchModal
         open={spotifySearchModalOpen}
         setOpen={setSpotifySearchModalOpen}
       />
-      {selectedSpotifySong ? (
-        <>
-          <Button
-            size='small'
-            onClick={handleClearSelectedSong}
-            sx={{
-              fontSize: '.9rem !important',
-              marginTop: '1rem',
-            }}
-          >
-            Use manual form instead
-          </Button>
-          <SpotifyTrackItem
-            track={selectedSpotifySong}
-            sx={{
-              marginTop: '1rem',
-            }}
-          />
-        </>
-      ) : (
-        <>
-          <Divider
-            sx={{
-              marginTop: '1rem',
-              marginBottom: '.4rem',
-              padding: '1rem 2rem',
-            }}
-          >
-            <span
-              style={{
-                opacity: 0.6,
-                fontSize: '1.3rem',
-              }}
-            >
-              or
-            </span>
-          </Divider>
 
-          {!showManualFields && (
-            <Button
-              size='small'
-              onClick={handleShowManualFields}
-              sx={{
-                fontSize: '.9rem !important',
-                marginTop: '1rem',
-                opacity: 0.9,
-              }}
-            >
-              Use manual form instead
-            </Button>
-          )}
-          {showManualFields && manualFields}
-        </>
+      {selectedSpotifySong && (
+        <SpotifyTrackItem
+          track={selectedSpotifySong}
+          sx={{
+            marginTop: '1rem',
+          }}
+        />
       )}
 
       <TextField
-        label='Why are you requesting this song?'
+        label='Why should the DJ play this song?'
         variant='outlined'
         fullWidth
         size='small'
