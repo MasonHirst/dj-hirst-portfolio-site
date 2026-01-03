@@ -9,41 +9,77 @@
 .form-iframe {
   width: 100%;
   max-width: 1000px;
-  height: 4050px;
+  height: 3550px;
+}
+
+.submitted-height {
+  height: 400px !important;
 }
 
 @media (max-width: 600px) {
   .form-iframe {
-    height: 4170px;
+    height: 3600px;
   }
 }
 
 @media (max-width: 550px) {
   .form-iframe {
-    height: 4350px;
+    height: 3700px;
+  }
+}
+
+@media (max-width: 500px) {
+  .form-iframe {
+    height: 3750px;
   }
 }
 
 @media (max-width: 450px) {
   .form-iframe {
-    height: 4500px;
+    height: 3840px;
+  }
+}
+
+@media (max-width: 425px) {
+  .form-iframe {
+    height: 4000px;
   }
 }
 
 @media (max-width: 400px) {
   .form-iframe {
-    height: 4800px;
+    height: 4120px;
+  }
+}
+
+@media (max-width: 375px) {
+  .form-iframe {
+    height: 4200px;
   }
 }
 
 @media (max-width: 350px) {
   .form-iframe {
-    height: 5000px;
+    height: 4280px;
+  }
+  .submitted-height {
+    height: 500px !important;
+  }
+}
+
+@media (max-width: 330px) {
+  .form-iframe {
+    height: 4340px;
+  }
+}
+@media (max-width: 315px) {
+  .form-iframe {
+    height: 4430px;
   }
 }
 
 @media (max-width: 300px) {
   .form-iframe {
-    height: 5100px;
+    height: 4530px;
   }
 }

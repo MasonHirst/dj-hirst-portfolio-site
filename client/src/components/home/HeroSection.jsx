@@ -24,7 +24,7 @@ const HeroSection = () => {
             fontSize: {xs: '0.9rem !important', sm: '1.3rem !important'},
           }}
         >
-          Get a quote for your event
+          Get a Quote
         </Button>
       </div>
     </div>
