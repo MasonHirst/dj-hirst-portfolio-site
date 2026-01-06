@@ -1,28 +1,31 @@
-import React, { useContext } from 'react'
-import './footer.css'
-import PhoneIcon from '@mui/icons-material/Phone'
-import EmailIcon from '@mui/icons-material/Email'
-import Link from '@mui/material/Link'
-import FacebookIcon from '@mui/icons-material/Facebook'
-import { useNavigate } from 'react-router-dom'
-import { DesignContext } from '../context/DesignContext'
+import React, { useContext } from 'react';
+import './footer.css';
+import PhoneIcon from '@mui/icons-material/Phone';
+import EmailIcon from '@mui/icons-material/Email';
+import Link from '@mui/material/Link';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { DesignContext } from '../context/DesignContext';
 
 const Footer = () => {
-  const { showFooter } = useContext(DesignContext)
-  const navigate = useNavigate()
+  const { showFooter } = useContext(DesignContext);
+  const navigate = useNavigate();
   const navLinks = [
     { label: 'Home', navPath: '/' },
     { label: 'Form', navPath: '/form' },
     { label: 'Payments', navPath: '/payments' },
-  ]
+  ];
+
+  const location = useLocation();
+  const isRequestPage = location.pathname.includes('/request');
 
   function navigateApp(url) {
-    navigate(url)
-    window.scroll(0, 0)
+    navigate(url);
+    window.scroll(0, 0);
   }
 
   if (!showFooter) {
-    return
+    return;
   }
   return (
     <footer
@@ -46,7 +49,7 @@ const Footer = () => {
             >
               {link.label}
             </Link>
-          )
+          );
         })}
       </nav>
       <Link
@@ -55,14 +58,16 @@ const Footer = () => {
       >
         <FacebookIcon sx={{ fontSize: 60 }} />
       </Link>
-      <Link
-        href='tel:3852001306'
-        underline='none'
-        className='contact-text-container'
-      >
-        <PhoneIcon />
-        (385) 200-1306
-      </Link>
+      {!isRequestPage && (
+        <Link
+          href='tel:3852001306'
+          underline='none'
+          className='contact-text-container'
+        >
+          <PhoneIcon />
+          (385) 200-1306
+        </Link>
+      )}
       <Link
         href='mailto:hirst.entertainment@email.com'
         underline='none'
@@ -76,7 +81,7 @@ const Footer = () => {
         hirst.entertainment@gmail.com
       </Link>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

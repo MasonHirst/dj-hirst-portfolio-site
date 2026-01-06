@@ -1,17 +1,18 @@
 import {
   Avatar,
+  Badge,
   Box,
   ListItem,
   ListItemAvatar,
   ListItemText,
   Typography,
-} from '@mui/material'
-import React, { forwardRef, useMemo } from 'react'
-import ExplicitRoundedIcon from '@mui/icons-material/ExplicitRounded'
+} from '@mui/material';
+import React, { forwardRef, useMemo } from 'react';
+import ExplicitRoundedIcon from '@mui/icons-material/ExplicitRounded';
 import {
   formatArtistNames,
   formatTrackDuration,
-} from '../../utils/helper-functions'
+} from '../../utils/helper-functions';
 
 const SpotifyTrackItem = forwardRef(
   (
@@ -20,50 +21,51 @@ const SpotifyTrackItem = forwardRef(
       clickable = false,
       sx,
       sizeMultiplier,
+      count = null,
       selectTrack = function () {},
       ...props
     },
     ref
   ) => {
     const isExplicit = useMemo(() => {
-      return track?.explicit
-    }, [track])
+      return track?.explicit;
+    }, [track]);
 
     const trackImage = useMemo(() => {
-      return track?.album?.images?.[1]?.url
-    }, [track])
+      return track?.album?.images?.[1]?.url;
+    }, [track]);
 
     const trackDuration = useMemo(() => {
-      return formatTrackDuration(track?.duration_ms)
-    }, [track])
+      return formatTrackDuration(track?.duration_ms);
+    }, [track]);
 
     const songNameSize = useMemo(() => {
       if (isNaN(sizeMultiplier)) {
-        return '1rem'
+        return '1rem';
       }
-      return `${1 * sizeMultiplier}rem`
-    }, [sizeMultiplier, sx])
+      return `${1 * sizeMultiplier}rem`;
+    }, [sizeMultiplier, sx]);
 
     const artistNamesSize = useMemo(() => {
       if (isNaN(sizeMultiplier)) {
-        return '0.875rem'
+        return '0.875rem';
       }
-      return `${0.875 * sizeMultiplier}rem`
-    }, [sizeMultiplier, sx])
+      return `${0.875 * sizeMultiplier}rem`;
+    }, [sizeMultiplier, sx]);
 
     const imageDimension = useMemo(() => {
       if (isNaN(sizeMultiplier)) {
-        return '3.1rem'
+        return '3.1rem';
       }
-      return `${3.1 * sizeMultiplier}rem`
-    }, [sizeMultiplier, sx])
+      return `${3.1 * sizeMultiplier}rem`;
+    }, [sizeMultiplier, sx]);
 
     const imgMarginRight = useMemo(() => {
       if (isNaN(sizeMultiplier)) {
-        return '0.4rem'
+        return '0.4rem';
       }
-      return `${0.4 * sizeMultiplier}rem`
-    }, [sizeMultiplier, sx])
+      return `${0.4 * sizeMultiplier}rem`;
+    }, [sizeMultiplier, sx]);
 
     return (
       <ListItem
@@ -84,7 +86,9 @@ const SpotifyTrackItem = forwardRef(
             display: 'flex',
             alignItems: 'center',
             flexGrow: 1,
-            overflow: 'hidden',
+            // overflow: 'hidden',
+            paddingTop: '0.2rem',
+            paddingLeft: '0.2rem',
           }}
         >
           {trackImage && (
@@ -94,16 +98,24 @@ const SpotifyTrackItem = forwardRef(
                 marginRight: imgMarginRight,
               }}
             >
-              <Avatar
-                variant='square'
-                src={trackImage} // Medium album cover
-                alt={track?.name}
-                sx={{
-                  width: imageDimension,
-                  height: imageDimension,
-                  borderRadius: '8px !important',
-                }}
-              />
+              <Badge
+                badgeContent={count}
+                invisible={!count || count <= 1}
+                overlap="rectangular"
+                anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                color='primary'
+              >
+                <Avatar
+                  variant='square'
+                  src={trackImage} // Medium album cover
+                  alt={track?.name}
+                  sx={{
+                    width: imageDimension,
+                    height: imageDimension,
+                    borderRadius: '8px !important',
+                  }}
+                />
+              </Badge>
             </ListItemAvatar>
           )}
           <ListItemText
@@ -165,8 +177,8 @@ const SpotifyTrackItem = forwardRef(
           {trackDuration}
         </Typography>
       </ListItem>
-    )
+    );
   }
-)
+);
 
-export default SpotifyTrackItem
+export default SpotifyTrackItem;

@@ -48,6 +48,15 @@ const RequestsTable = () => {
     setSongNameFilter(request.name)
   }
 
+  function getSongRequestCount(trackId) {
+    return filteredSongRequests.reduce((count, request) => {
+      if (request.request_details?.id === trackId) {
+        return count + 1
+      }
+      return count
+    }, 0)
+  }
+
   useEffect(() => {
     setRequestCountById(
       filteredSongRequests.reduce((acc, request) => {
@@ -136,6 +145,7 @@ const RequestsTable = () => {
                     <Tooltip title='Filter by song name'>
                       <SpotifyTrackItem
                         track={request.request_details}
+                        count={getSongRequestCount(request.request_details?.id)}
                         sx={{ padding: 0 }}
                         sizeMultiplier={0.95}
                         clickable
